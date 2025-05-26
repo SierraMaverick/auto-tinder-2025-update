@@ -10,7 +10,7 @@ class Classifier():
         self._input_operation = self._graph.get_operation_by_name("import/Placeholder")
         self._output_operation = self._graph.get_operation_by_name("import/final_result")
 
-        self._session = tf.Session(graph=self._graph)
+        self._session = tf.compat.v1.Session(graph=self._graph)
 
     def classify(self, file_name):
         t = self.read_tensor_from_image_file(file_name)
@@ -35,18 +35,18 @@ class Classifier():
 
     @staticmethod
     def load_graph(model_file):
-        graph = tf.Graph()
-        graph_def = tf.GraphDef()
+        graph = tf.compat.v1.Graph()
+        graph_def = tf.compat.v1.GraphDef()
         with open(model_file, "rb") as f:
             graph_def.ParseFromString(f.read())
         with graph.as_default():
-            tf.import_graph_def(graph_def)
+            tf.compat.v1.import_graph_def(graph_def)
         return graph
 
     @staticmethod
     def load_labels(label_file):
         label = []
-        proto_as_ascii_lines = tf.gfile.GFile(label_file).readlines()
+        proto_as_ascii_lines = tf.compat.v1.gfile.GFile(label_file).readlines()
         for l in proto_as_ascii_lines:
             label.append(l.rstrip())
         return label
@@ -58,13 +58,13 @@ class Classifier():
                                     input_mean=0,
                                     input_std=255):
         input_name = "file_reader"
-        file_reader = tf.read_file(file_name, input_name)
-        image_reader = tf.image.decode_jpeg(
+        file_reader = tf.compat.v1.read_file(file_name, input_name)
+        image_reader = tf.compat.v1.image.decode_jpeg(
             file_reader, channels=3, name="jpeg_reader")
-        float_caster = tf.cast(image_reader, tf.float32)
-        dims_expander = tf.expand_dims(float_caster, 0)
-        resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
-        normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
-        sess = tf.Session()
+        float_caster = tf.compat.v1.cast(image_reader, tf.float32)
+        dims_expander = tf.compat.v1.expand_dims(float_caster, 0)
+        resized = tf.compat.v1.image.resize_bilinear(dims_expander, [input_height, input_width])
+        normalized = tf.compat.v1.divide(tf.compat.v1.subtract(resized, [input_mean]), [input_std])
+        sess = tf.compat.v1.Session()
         result = sess.run(normalized)
         return result

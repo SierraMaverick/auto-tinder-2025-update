@@ -14,6 +14,7 @@ LOVOO_FOLDER = "./images/lovoo"
 
 
 if __name__ == "__main__":
+    tf.compat.v1.disable_eager_execution()
     detection_graph = person_detector.open_graph()
 
     images = [f for f in os.listdir(IMAGE_FOLDER) if os.path.isfile(os.path.join(IMAGE_FOLDER, f))]
@@ -22,7 +23,7 @@ if __name__ == "__main__":
     lovoo_images = [f for f in os.listdir(LOVOO_FOLDER) if os.path.isfile(os.path.join(LOVOO_FOLDER, f))]
 
     with detection_graph.as_default():
-        with tf.Session() as sess:
+        with tf.compat.v1.Session() as sess:
 
             for pos in lovoo_images:
                 old_filename = LOVOO_FOLDER + "/" + pos
