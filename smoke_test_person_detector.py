@@ -10,7 +10,7 @@ try:
 
     print("\nAttempting to detect a person in an image...")
     test_image_path = "images/unclassified/test_4tz3kjldfj3482.jpg"
-    
+
     # get_person requires a session
     with detection_graph.as_default():
         with tf.compat.v1.Session() as sess:

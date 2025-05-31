@@ -13,11 +13,11 @@ try:
     # Create a dummy JPG file for testing if a real one is problematic
     # For now, let's assume the path is correct and accessible by the script
     test_image_path = "images/unclassified/test_4tz3kjldfj3482.jpg"
-    
+
     # The classify method expects a string path to the image
     predictions = classifier.classify(test_image_path)
     print(f"Classification result for {test_image_path}: {predictions}")
-    
+
     classifier.close()
     print("Classifier closed.")
 
